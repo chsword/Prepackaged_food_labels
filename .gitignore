@@ -243,3 +243,29 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/bower_components/bootstrap/grunt
+/bower_components/bootstrap/js
+/bower_components/bootstrap/less
+/bower_components/bootstrap/nuget
+/bower_components/bootstrap/README.md
+/bower_components/bootstrap/package.json
+/bower_components/bootstrap/package.js
+/bower_components/bootstrap/LICENSE
+/bower_components/bootstrap/Gruntfile.js
+/bower_components/bootstrap/CHANGELOG.md
+/bower_components/bootstrap/bower.json
+/bower_components/bootstrap/.bower.json
+/bower_components/jquery/external/sizzle
+/bower_components/jquery/src
+/bower_components/jquery/README.md
+/bower_components/jquery/LICENSE.txt
+/bower_components/jquery/bower.json
+/bower_components/jquery/AUTHORS.txt
+/bower_components/jquery/.bower.json
+/bower_components/knockoutjs/src
+/bower_components/knockoutjs/README.md
+/bower_components/knockoutjs/package.json
+/bower_components/knockoutjs/LICENSE
+/bower_components/knockoutjs/Gruntfile.js
+/bower_components/knockoutjs/bower.json
+/bower_components/knockoutjs/.bower.json

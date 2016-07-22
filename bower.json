@@ -1,0 +1,7 @@
+{
+  "name": "prepackaged_food_labels",
+  "dependencies": {
+    "bootstrap": "3.3.6",
+    "knockoutjs": "3.4.0"
+  }
+}
