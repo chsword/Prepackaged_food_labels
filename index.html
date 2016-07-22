@@ -5,11 +5,170 @@
     <title></title>
 	<meta charset="utf-8" />
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/knockoutjs/dist/knockout.js"></script>
 </head>
 <body>
+    <div class="page-header">
+        <div class="navbar-header">
+            <div class="panel-title">预包装食品标签计算</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-title">请输入营养成分</div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>每100克（g）</th>
+                                <th>NRV%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>能量</td>
+                                <td>
+                                    千焦（kJ）
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>蛋白质</td>
+                                <td><input data-bind="value: protein" /> 克（g）</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>脂肪</td>
+                                <td><input data-bind="value: fat" />克（g）</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>碳水化合物</td>
+                                <td><input data-bind="value: carbohydrate" />克（g）</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>钠</td>
+                                <td><input data-bind="value: sodium" />毫克（mg）</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-danger">
+                <div class="panel-title">输入值的问题</div>
+                <div class="panel-body"></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <div class="panel-title">营养成分表</div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>每100克（g）</th>
+                                <th>NRV%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>能量</td>
+                                <td><span data-bind="text: energy1"> </span>千焦（kJ）</td>
+                                <td><span data-bind="text: energy2"> </span></td>
+                            </tr>
+                            <tr>
+                                <td>蛋白质</td>
+                                <td><span data-bind="text: protein1"> </span>克（g）</td>
+                                <td><span data-bind="text: protein2"> </span></td>
+                            </tr>
+                            <tr>
+                                <td>脂肪</td>
+                                <td><span data-bind="text: fat1"> </span>克（g）</td>
+                                <td><span data-bind="text: fat2"> </span></td>
+                            </tr>
+                            <tr>
+                                <td>碳水化合物</td>
+                                <td><span data-bind="text: carbohydrate1"> </span>克（g）</td>
+                                <td><span data-bind="text: carbohydrate2"> </span></td>
+                            </tr>
+                            <tr>
+                                <td>钠</td>
+                                <td><span data-bind="text: sodium1"> </span>毫克（mg）</td>
+                                <td><span data-bind="text: sodium2"> </span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var ViewModel = function (protein, fat, carbohydrate, sodium) {
+            this.protein = ko.observable(protein);
+            this.fat = ko.observable(fat);
+            this.carbohydrate = ko.observable(carbohydrate);
+            this.sodium = ko.observable(sodium);
+            this.protein1 = ko.pureComputed(function () {
+                var x = this.protein();
+                var y = x <= 0.5 ? 0 : x;
+                return parseFloat(y).toFixed(1);
+            }, this);
+            this.protein2 = ko.pureComputed(function () {
+                return parseInt(parseFloat(this.protein())*100/60,10) + "%";
+            }, this);
 
+            this.carbohydrate1 = ko.pureComputed(function () {
+                var x = this.carbohydrate();
+                var y = x <= 0.5 ? 0 : x;
+                return parseFloat(y).toFixed(1);
+            }, this);
+            this.carbohydrate2 = ko.pureComputed(function () {
+                return parseInt(parseFloat(this.carbohydrate()) * 100 / 300, 10) + "%";
+
+            }, this);
+            this.fat1 = ko.pureComputed(function () {
+                var x = this.fat();
+                var y = x <= 0.5 ? 0 : x;
+                return parseFloat(y).toFixed(1);
+               
+            }, this);
+            this.fat2 = ko.pureComputed(function () {
+                return parseInt(parseFloat(this.fat()) * 100 / 60, 10) + "%";
+            }, this);
+            this.sodium1 = ko.pureComputed(function () {
+                var x = this.sodium();
+                return x <= 5 ? 0 : x;
+            }, this);
+            this.sodium2 = ko.pureComputed(function () {
+                return parseInt(parseFloat(this.sodium()) * 100 / 2000, 10) + "%";
+            }, this);
+      
+            this.energy1 = ko.pureComputed(function () {
+                /*
+                1g 蛋白质体内氧化产能 16.74 kJ，
+                1g 脂肪体内氧化产能 37.56 kJ，
+                1g 碳水化合物体内氧化产能 16.81 kJ
+                */
+                var x = this.protein() * 15.64 + this.fat() * 37.56 + this.carbohydrate() * 16.81;
+                var y = x <= 17 ? 0 : x;
+                return parseInt(y,10);
+            }, this);
+            this.energy2 = ko.pureComputed(function () {
+                return parseInt(parseFloat(this.energy1()) * 100 / 8400, 10) + "%";
+            }, this);
+        };
+
+        ko.applyBindings(new ViewModel(0, 0, 0, 0));
+    </script>
 </body>
 </html>
