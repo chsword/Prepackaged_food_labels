@@ -147,7 +147,7 @@
             }, this);
             this.sodium1 = ko.pureComputed(function () {
                 var x = this.sodium();
-                return x <= 5 ? 0 : x;
+                return parseInt(x <= 5 ? 0 : x,10);
             }, this);
             this.sodium2 = ko.pureComputed(function () {
                 return parseInt(parseFloat(this.sodium()) * 100 / 2000, 10) + "%";
