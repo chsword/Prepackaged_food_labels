@@ -11,22 +11,17 @@
     <script src="bower_components/angular/angular.min.js"></script>
     <script>
         var model = [
-            { name: "大黄米", "value": [349, 13.6, 2.7, 67.6, 1.7] },
-            { name: "小麦仁", "value": [0,11.2,1.5,71.5,0] },
-            { name: "燕麦片", "value": [367, 15, 6.7, 61.6, 3.7] },
-            { name: "燕麦米", "value": [391, 15.6, 8.8, 61.6, 3.7] },
-            { name: "玉米糁", "value": [347, 7.9, 3, 72, 1.7] },
+            { name: "C", value: [] },
+             { name: "赤小豆", "value": [309, 20.2, 0.6, 55.7, 2.2] },
             { name: "糙米", "value": [332, 8.07, 1.85, 77.9, 3.8] },
-            { name: "糯米(江米)", "value": [348, 7.3, 1, 77.5, 1.5] },
-            { name: "红米", "value": [344, 7, 2, 74.4, 22] },
-            { name: "红豆", "value": [309, 20.2, 0.70, 63.4, 2.2] },
-            { name: "绿豆", "value": [316, 21.6, 0.8, 55.6, 3.2] },
-            { name: "花生米", "value": [298, 24.8, 44.3,21.7, 0] },
-            { name: "花芸豆(?)", "value": [0, 23.1, 1.3, 56.9, 0] },
-            { name: "荞麦米", "value": [324, 9.3, 2.3, 73, 4.7] },
-            { name: "薏仁米", "value": [357, 12.8, 3.3, 69.1, 3.6] },
-            { name: "赤小豆", "value": [309, 20.2, 0.6, 55.7, 2.2] },
+             { name: "D", value: [] },
+            { name: "大黄米", "value": [349, 13.6, 2.7, 67.6, 1.7] },
+
+
+
+            { name: "G", value: [] },
             { name: "高粱米", "value": [351, 10.4, 3.1, 70.4, 6.3] },
+            { name: "H", value: [] },
             { name: "黄小米", "value": [358, 9, 3.1, 73.5, 4.3] },
             { name: "黄芽豆", "value": [359, 35, 16, 18.7, 2.2] },
             { name: "黄豆", "value": [359, 35, 16, 18.7, 2.2] },
@@ -34,6 +29,23 @@
             { name: "黑糯米", "value": [344, 9, 1.7, 75.3, 1.2] },
             { name: "黑芝麻", "value": [531, 19.1, 46.1, 24, 8.3] },
             { name: "黑豆", "value": [381, 36, 15.9, 23.4, 3] },
+             { name: "花生米", "value": [298, 24.8, 44.3, 21.7, 0] },
+            { name: "花芸豆(?)", "value": [0, 23.1, 1.3, 56.9, 0] },
+              { name: "红豆", "value": [309, 20.2, 0.70, 63.4, 2.2] },
+                { name: "红米", "value": [344, 7, 2, 74.4, 22] },
+                  { name: "L", value: [] },
+               { name: "绿豆", "value": [316, 21.6, 0.8, 55.6, 3.2] },
+                 { name: "N", value: [] },
+                { name: "糯米(江米)", "value": [348, 7.3, 1, 77.5, 1.5] },
+                  { name: "Q", value: [] },
+              { name: "荞麦米", "value": [324, 9.3, 2.3, 73, 4.7] },
+                { name: "X", value: [] },
+               { name: "小麦仁", "value": [0, 11.2, 1.5, 71.5, 0] },
+                 { name: "Y", value: [] },
+            { name: "燕麦片", "value": [367, 15, 6.7, 61.6, 3.7] },
+            { name: "燕麦米", "value": [391, 15.6, 8.8, 61.6, 3.7] },
+            { name: "玉米糁", "value": [347, 7.9, 3, 72, 1.7] },
+             { name: "薏仁米", "value": [357, 12.8, 3.3, 69.1, 3.6] },
         ];
     </script>
     <style>
@@ -45,16 +57,11 @@
         <div class="panel-heading">预设</div>
         <div class="panel-body" id="pre-panel">
             <span ng-repeat="item in myModel">
-                <span ng-show="item.value.length==0">{{item.name}}(未设置)</span>
-                <a  ng-show="item.value.length!=0" style="cursor:pointer" ng-click="myClick(item.value)">{{item.name}}</a>
+                <span ng-show="item.value.length==0"><br />{{item.name}}</span>
+                <a ng-class="item.class" ng-show="item.value.length!=0" style="cursor:pointer" ng-click="myClick(item)">{{item.name}}</a>
             </span>
         </div>
  
-    </div>
-    <div class="page-header">
-        <div class="navbar-header">
-            <div class="panel-title">预包装食品标签计算</div>
-        </div>
     </div>
     <div class="row">
         <div class="col-md-3">
@@ -265,16 +272,20 @@
        
         var myAppModule = angular.module('myApp', []);
         myAppModule.controller('myController',
-         function  ($scope) {
+         function ($scope) {
+             $scope.last = {};
              $scope.myModel = model;
-             $scope.myClick = function (value) {
+             $scope.myClick = function (item) {
+                 var value = item.value;
                  if (value.length == 5) {
-                     
+                     $scope.last.class = "";
+                     item.class = "label label-info";
                      $("#ipt-kj").text((value[0]*4.184).toFixed(2));
                      $("#ipt-dbz").val(value[1]).change();
                      $("#ipt-zf").val(value[2]).change();
                      $("#ipt-tshhw").val(value[3]).change();
                      $("#ipt-na").val(value[4]).change();
+                     $scope.last = item;
                  }
              };
          });
