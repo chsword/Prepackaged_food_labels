@@ -8,15 +8,56 @@
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/knockoutjs/dist/knockout.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script>
+        var model = [
+            { name: "大黄米", "value": [349, 13.6, 2.7, 67.6, 1.7] },
+            { name: "小麦仁", "value": [] },
+            { name: "燕麦片", "value": [367, 15, 6.7, 61.6, 3.7] },
+            { name: "燕麦米", "value": [391, 15.6, 8.8, 61.6, 3.7] },
+            { name: "玉米糁", "value": [347, 7.9, 3, 72, 1.7] },
+            { name: "糙米", "value": [332, 8.07, 1.85, 77.9, 3.8] },
+            { name: "糯米(江米)", "value": [348, 7.3, 1, 77.5, 1.5] },
+            { name: "红米", "value": [344, 7, 2, 74.4, 0] },
+            { name: "红豆", "value": [309, 20.2, 0.70, 63.4, 2.2] },
+            { name: "绿豆", "value": [316, 21.6, 0.8, 55.6, 3.2] },
+            { name: "花生米", "value": [298, 12, 25.4, 5.3, 3.7] },
+            { name: "花芸豆(?)", "value": [0, 23.1, 1.3, 56.9, 0] },
+            { name: "荞麦米", "value": [324, 9.3, 2.3, 73, 4.7] },
+            { name: "薏仁米", "value": [357, 12.8, 3.3, 69.1, 3.6] },
+            { name: "赤小豆", "value": [309, 20.2, 0.6, 55.7, 2.2] },
+            { name: "高粱米", "value": [351, 10.4, 3.1, 70.4, 6.3] },
+            { name: "黄小米", "value": [358, 9, 3.1, 73.5, 4.3] },
+            { name: "黄芽豆", "value": [359, 35, 16, 18.7, 2.2] },
+            { name: "黄豆", "value": [359, 35, 16, 18.7, 2.2] },
+            { name: "黑米", "value": [333, 9.4, 2.5, 68.3, 7.1] },
+            { name: "黑糯米", "value": [344, 9, 1, 75.3, 1.2] },
+            { name: "黑芝麻", "value": [531, 19.1, 46.1, 10, 8.3] },
+            { name: "黑豆", "value": [381, 36, 15.9, 23.4, 3] },
+        ];
+    </script>
+    <style>
+        input{width:40px}
+    </style>
 </head>
-<body>
+<body ng-app="myApp" ng-controller="myController">
+    <div class="panel panel-info">
+        <div class="panel-heading">预设</div>
+        <div class="panel-body" id="pre-panel">
+            <span ng-repeat="item in myModel">
+                <span ng-show="item.value.length==0">{{item.name}}(未设置)</span>
+                <a  ng-show="item.value.length!=0" style="cursor:pointer" ng-click="myClick(item.value)">{{item.name}}</a>
+            </span>
+        </div>
+ 
+    </div>
     <div class="page-header">
         <div class="navbar-header">
             <div class="panel-title">预包装食品标签计算</div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-title">请输入营养成分</div>
                 <div class="panel-body">
@@ -35,26 +76,27 @@
                                     千焦（kJ）
                                 </td>
                                 <td>
+                                    <span id="ipt-kj"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>蛋白质</td>
-                                <td><input data-bind="value: protein" /> 克（g）</td>
+                                <td><input id="ipt-dbz" data-bind="value: protein" /> 克（g）</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>脂肪</td>
-                                <td><input data-bind="value: fat" />克（g）</td>
+                                <td><input id="ipt-zf" data-bind="value: fat" />克（g）</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>碳水化合物</td>
-                                <td><input data-bind="value: carbohydrate" />克（g）</td>
+                                <td><input id="ipt-tshhw" data-bind="value: carbohydrate" />克（g）</td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>钠</td>
-                                <td><input data-bind="value: sodium" />毫克（mg）</td>
+                                <td><input id="ipt-na" data-bind="value: sodium" />毫克（mg）</td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -62,13 +104,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="panel panel-danger">
-                <div class="panel-title">输入值的问题</div>
-                <div class="panel-body"></div>
-            </div>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="panel panel-success">
                 <div class="panel-title">营养成分表</div>
                 <div class="panel-body">
@@ -105,6 +141,61 @@
                                 <td>钠</td>
                                 <td><span data-bind="text: sodium1"> </span>毫克（mg）</td>
                                 <td><span data-bind="text: sodium2"> </span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-title">计算标准</div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>值</th>
+                                <th>NRV</th>
+                                <th>NRV基数</th>
+                                <th>能量计算标准</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>能量</td>
+                                <td>1 <=17</td>
+                                <td>-</td>
+                                <td>8400</td>
+                                <th>-</th>
+                            </tr>
+                            <tr>
+                                <td>蛋白质</td>
+                                <td>0.1 <=0.5</td>
+                                <td>-</td>
+                                <td>60</td>
+                                <th> 1g 蛋白质体内氧化产能 16.74 kJ</th>
+                            </tr>
+                            <tr>
+                                <td>脂肪</td>
+                                <td>0.1 <=0.5</td>
+                                <td>-</td>
+                                <td>60</td>
+                                <th>1g 脂肪体内氧化产能 37.56 kJ</th>
+                            </tr>
+                            <tr>
+                                <td>碳水化合物</td>
+                                <td>0.1 <=0.5</td>
+                                <td>-</td>
+                                <td>300</td>
+                                <th>1g 碳水化合物体内氧化产能 16.81 kJ</th>
+                            </tr>
+                            <tr>
+                                <td>钠</td>
+                                <td>1 <=5</td>
+                                <td>-</td>
+                                <td>2000</td>
+                                <th>-</th>
                             </tr>
                         </tbody>
                     </table>
@@ -169,6 +260,24 @@
         };
 
         ko.applyBindings(new ViewModel(0, 0, 0, 0));
+
+
+       
+        var myAppModule = angular.module('myApp', []);
+        myAppModule.controller('myController',
+         function  ($scope) {
+             $scope.myModel = model;
+             $scope.myClick = function (value) {
+                 if (value.length == 5) {
+                     
+                     $("#ipt-kj").text((value[0]*4.184).toFixed(2));
+                     $("#ipt-dbz").val(value[1]).change();
+                     $("#ipt-zf").val(value[2]).change();
+                     $("#ipt-tshhw").val(value[3]).change();
+                     $("#ipt-na").val(value[4]).change();
+                 }
+             };
+         });
     </script>
 </body>
 </html>
