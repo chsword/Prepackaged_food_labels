@@ -257,7 +257,7 @@
                 1g 脂肪体内氧化产能 37.56 kJ，
                 1g 碳水化合物体内氧化产能 16.81 kJ
                 */
-                var x = this.protein() * 15.64 + this.fat() * 37.56 + this.carbohydrate() * 16.81;
+                var x = this.protein() * 17.0/*15.64*/ + this.fat() * 37 + this.carbohydrate() * 17;
                 var y = x <= 17 ? 0 : x;
                 return parseInt(y,10);
             }, this);
