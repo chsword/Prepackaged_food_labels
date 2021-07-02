@@ -211,6 +211,9 @@
         </div>
     </div>
     <script type="text/javascript">
+        function nvr(n,father){
+           return  parseInt(Math.round(parseFloat(n)*100/father),10) + "%";
+        }
         var ViewModel = function (protein, fat, carbohydrate, sodium) {
             this.protein = ko.observable(protein);
             this.fat = ko.observable(fat);
@@ -222,7 +225,7 @@
                 return parseFloat(y).toFixed(1);
             }, this);
             this.protein2 = ko.pureComputed(function () {
-                return parseInt(parseFloat(this.protein())*100/60,10) + "%";
+                return nvr(this.protein(),60);
             }, this);
 
             this.carbohydrate1 = ko.pureComputed(function () {
@@ -231,8 +234,7 @@
                 return parseFloat(y).toFixed(1);
             }, this);
             this.carbohydrate2 = ko.pureComputed(function () {
-                return parseInt(parseFloat(this.carbohydrate()) * 100 / 300, 10) + "%";
-
+                return nvr(this.carbohydrate(),300);
             }, this);
             this.fat1 = ko.pureComputed(function () {
                 var x = this.fat();
@@ -241,14 +243,15 @@
                
             }, this);
             this.fat2 = ko.pureComputed(function () {
-                return parseInt(parseFloat(this.fat()) * 100 / 60, 10) + "%";
+              
+                return nvr(this.fat(),60);
             }, this);
             this.sodium1 = ko.pureComputed(function () {
                 var x = this.sodium();
                 return parseInt(x <= 5 ? 0 : x,10);
             }, this);
             this.sodium2 = ko.pureComputed(function () {
-                return parseInt(parseFloat(this.sodium()) * 100 / 2000, 10) + "%";
+                return nvr(this.sodium(),2000);
             }, this);
       
             this.energy1 = ko.pureComputed(function () {
@@ -262,7 +265,8 @@
                 return parseInt(y,10);
             }, this);
             this.energy2 = ko.pureComputed(function () {
-                return parseInt(Math.round(parseFloat(this.energy1()) * 100 / 8400), 10) + "%";
+    
+                return nvr(this.energy1(),8400);
             }, this);
             
         };
