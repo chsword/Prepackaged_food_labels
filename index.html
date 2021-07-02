@@ -262,8 +262,9 @@
                 return parseInt(y,10);
             }, this);
             this.energy2 = ko.pureComputed(function () {
-                return parseInt(parseFloat(this.energy1()) * 100 / 8400, 10) + "%";
+                return parseInt(Math.round(parseFloat(this.energy1()) * 100 / 8400), 10) + "%";
             }, this);
+            
         };
 
         ko.applyBindings(new ViewModel(0, 0, 0, 0));
